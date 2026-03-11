@@ -17,7 +17,7 @@ row_duration_ms = 1000
 should_exit = False
 
 # connect to the controller FIRST
-controller = Controller(port="COM4")
+controller = Controller(port="COM9")
 controller.connect()
 time.sleep(1)
 # select the desired time duration per row (col_ms)
@@ -38,8 +38,8 @@ def listen_for_input():
             elif key == 's':
                 controller.exec()
 
-print("\n=== To start the stimulating, press:  s          ===")
-print("\n=== To quit the program, press:       q          ===\n")
+print("\n=== To start the stimulus, press:         s ===")
+print("\n=== To quit/interrupt the program, press: q ===\n")
 sys.stdout.flush()
 
 # Start input listener in background thread (daemon=True so it won't block exit)
