@@ -5,17 +5,23 @@ import sys
 import msvcrt
 import threading
 
+############################################
+# PARAMETERS TO CHANGE
 stim_dir = "stim_files"
+stim_file = "motion_stim_vertical.csv"
+# select the desired time duration per row (col_ms)
+row_duration_ms = 1000
+##################################################
 
 # Flag to signal program exit
 should_exit = False
 
 # connect to the controller FIRST
-controller = Controller(port="COM9")
+controller = Controller(port="COM4")
 controller.connect()
 time.sleep(1)
-# select the desired time duration per column (col_ms)
-controller.send_stimulus_from_csv_vertical(os.path.join(stim_dir,"motion_stim_vertical.csv"), col_ms=2000)
+# select the desired time duration per row (col_ms)
+controller.send_stimulus_from_csv_vertical(os.path.join(stim_dir,stim_file), col_ms=row_duration_ms)
 
 def listen_for_input():
     global should_exit
