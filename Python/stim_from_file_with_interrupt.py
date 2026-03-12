@@ -17,7 +17,7 @@ row_duration_ms = 1000
 should_exit = False
 
 # connect to the controller FIRST
-controller = Controller(port="COM9")
+controller = Controller(port="COM4")
 controller.connect()
 time.sleep(1)
 # select the desired time duration per row (col_ms)
