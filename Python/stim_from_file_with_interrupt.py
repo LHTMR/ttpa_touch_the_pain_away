@@ -7,8 +7,6 @@ import threading
 
 ############################################
 # PARAMETERS TO CHANGE
-# set the correct COM port for your controller
-com_port = "COM4"  
 # select the desired time duration per row (col_ms)
 row_duration_ms = 1000
 # default stim folder and file name (can be overridden by CLI)
@@ -30,14 +28,14 @@ if len(sys.argv) > 1:
         sys.exit(1)
 
 
-print(f"Stimulus file: {stim_file}")
+print(f"\nStimulus file: {stim_file}\n")
 sys.stdout.flush()
 # Flag to signal program exit
 should_exit = False
 
 # connect to the controller FIRST
 try:
-    controller = Controller(port=com_port)
+    controller = Controller()
     controller.connect()
     time.sleep(1)
     if os.path.exists(stim_file):

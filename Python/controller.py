@@ -1,4 +1,5 @@
 import serial
+import serial.tools.list_ports
 import time
 import threading
 import os
@@ -11,8 +12,8 @@ class Controller:
     Integrates serial communication, channel management, and stimulus generation.
     """
     
-    def __init__(self, port="COM7", baud=115200):
-        self.port = port
+    def __init__(self, baud=115200):
+        self.port = None
         self.baud = baud
         self.ser = None
         self._print_thread = None
@@ -25,7 +26,32 @@ class Controller:
         """Connect to Arduino via serial port."""
         if self.ser and self.ser.is_open:
             self.ser.close()
-        self.ser = serial.Serial(self.port, self.baud, timeout=1)
+
+        #######################################################################
+        connected = False
+        ports = serial.tools.list_ports.comports(include_links=False)
+        for port in ports :
+            print('Checking port '+ port.device)
+            try:
+                self.ser = serial.Serial(port.device, self.baud, timeout=0.5)
+                self.ser.reset_input_buffer()
+                self.ser.reset_output_buffer()
+                print("Testing connection...")
+                self.ser.write("hello\n".encode())
+                time.sleep(0.1)
+                response = self.ser.readline().decode('utf-8')
+                print("Response:", response)
+                if response == 'hello':
+                    self.port = port.device
+                    connected = True
+                    break
+            except:
+                print("Problem with",port.device)
+        if not connected: 
+            print('Could not find the controller. Is it plugged in?')
+        ######################################################################
+
+        # self.ser = serial.Serial(self.port, self.baud, timeout=1)
         self._running = True
         self._start_print_thread()
         print(f"Connected {self.port} @ {self.baud} baud")
